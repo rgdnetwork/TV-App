@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#0f0f0f" />
+        <title>TV App</title>
+        <link rel="manifest" href="manifest.webmanifest" />
+        <link rel="icon" type="image/png" href="icons/icon-192.png" />
+        <link rel="apple-touch-icon" href="icons/icon-192.png" />
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="vendor/inter/inter.css" />
+        <link rel="stylesheet" href="vendor/bootstrap-icons/bootstrap-icons.min.css" />
+    </head>
+
+    <body>
+        <div class="app">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo">
+                        <i class="bi bi-tv-fill"></i>
+                        <span>TV</span>
+                    </div>
+                </div>
+                <div class="sidebar-search">
+                    <div class="search-box">
+                        <i class="bi bi-search"></i>
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Buscar canales..."
+                            aria-label="Buscar canales"
+                        />
+                    </div>
+                </div>
+                <nav class="sidebar-nav" aria-label="Categorías">
+                    <div class="nav-section">
+                        <div class="nav-section-title">CATEGORÍAS</div>
+                        <ul class="nav-list" id="categoryList">
+                            <li class="nav-item active" data-category="all">
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Todos</span>
+                                <span class="nav-count" id="count-all">0</span>
+                            </li>
+                            <li class="nav-item" data-category="favorites">
+                                <i class="bi bi-heart-fill"></i>
+                                <span>Favoritos</span>
+                                <span class="nav-count" id="count-favorites">0</span>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+            <main class="main">
+                <header class="main-header">
+                    <div class="header-left">
+                        <h1 id="pageTitle">Todos los canales</h1>
+                        <span class="header-subtitle" id="channelCount" aria-live="polite">0 canales</span>
+                    </div>
+                    <div class="header-right">
+                        <button
+                            class="header-btn"
+                            id="exportBtn"
+                            title="Exportar datos"
+                            aria-label="Exportar datos"
+                        >
+                            <i class="bi bi-download"></i>
+                        </button>
+                        <button
+                            class="header-btn"
+                            id="importBtn"
+                            title="Importar datos"
+                            aria-label="Importar datos"
+                        >
+                            <i class="bi bi-upload"></i>
+                        </button>
+                        <input type="file" id="importInput" accept="application/json" style="display: none" />
+                        <button
+                            class="header-btn"
+                            id="editChannelBtn"
+                            title="Editar canal"
+                            aria-label="Editar canal"
+                            aria-pressed="false"
+                        >
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button
+                            class="header-btn"
+                            id="editModeBtn"
+                            title="Modo borrar"
+                            aria-label="Modo borrar"
+                            aria-pressed="false"
+                        >
+                            <i class="bi bi-trash"></i>
+                        </button>
+                        <button
+                            class="header-btn add-btn"
+                            id="addChannelBtn"
+                            title="Agregar canal"
+                            aria-label="Agregar canal"
+                        >
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                        <button
+                            class="header-btn"
+                            id="viewToggle"
+                            title="Cambiar vista"
+                            aria-label="Cambiar vista"
+                        >
+                            <i class="bi bi-grid-3x3-gap-fill"></i>
+                        </button>
+                    </div>
+                </header>
+                <div class="content">
+                    <div class="edit-banner" id="editBanner" style="display: none">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <span>Modo borrar - Pulsa sobre un canal para eliminarlo</span>
+                        <button class="edit-banner-btn" id="cancelEditBtn">Cancelar</button>
+                    </div>
+                    <div class="channels-grid" id="channelsGrid" role="region" aria-label="Canales"></div>
+                    <div class="load-more-sentinel" id="loadMoreSentinel" aria-hidden="true" hidden></div>
+                    <div class="empty-state" id="emptyState" role="status" style="display: none">
+                        <i class="bi bi-tv"></i>
+                        <h2>Sin canales</h2>
+                        <p>Agrega un canal con el botón +</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <div
+            class="modal"
+            id="addModal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="addModalTitle"
+            aria-hidden="true"
+        >
+            <div class="modal-backdrop" id="modalBackdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="addModalTitle">Agregar Canal</h2>
+                    <button class="modal-close" id="modalClose" aria-label="Cerrar">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="channelName">Nombre del canal</label>
+                        <input type="text" id="channelName" placeholder="Ej: Movistar LaLiga" />
+                    </div>
+                    <div class="form-group">
+                        <label for="channelId">ID AceStream</label>
+                        <input type="text" id="channelId" placeholder="Pega aquí el ID" />
+                    </div>
+                    <div class="form-group">
+                        <label for="channelGroup">Categoría (opcional)</label>
+                        <input type="text" id="channelGroup" placeholder="Ej: Deportes, General" />
+                    </div>
+                    <div class="form-group">
+                        <label for="channelLogo">URL del logo (opcional)</label>
+                        <input type="text" id="channelLogo" placeholder="https://..." />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                    <button class="btn btn-primary" id="saveBtn">Guardar</button>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal"
+            id="deleteModal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="deleteModalTitle"
+            aria-hidden="true"
+        >
+            <div class="modal-backdrop" id="deleteModalBackdrop"></div>
+            <div class="modal-content" style="max-width: 400px">
+                <div class="modal-header">
+                    <h2 id="deleteModalTitle">Eliminar canal</h2>
+                    <button class="modal-close" id="deleteModalClose" aria-label="Cerrar">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: var(--text-secondary); font-size: 14px">
+                        ¿Seguro que quieres eliminar
+                        <strong id="deleteChannelName" style="color: var(--text-primary)"></strong>?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="deleteCancelBtn">Cancelar</button>
+                    <button class="btn" style="background: #dc2626; color: white" id="deleteConfirmBtn">
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal"
+            id="editModal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="editModalTitle"
+            aria-hidden="true"
+        >
+            <div class="modal-backdrop" id="editModalBackdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="editModalTitle">Editar Canal</h2>
+                    <button class="modal-close" id="editModalClose" aria-label="Cerrar">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editChannelName">Nombre del canal</label>
+                        <input type="text" id="editChannelName" placeholder="Ej: Movistar LaLiga" />
+                    </div>
+                    <div class="form-group">
+                        <label for="editChannelId">ID AceStream</label>
+                        <input type="text" id="editChannelId" placeholder="Pega aquí el ID" />
+                    </div>
+                    <div class="form-group">
+                        <label for="editChannelGroup">Categoría (opcional)</label>
+                        <input type="text" id="editChannelGroup" placeholder="Ej: Deportes, General" />
+                    </div>
+                    <div class="form-group">
+                        <label for="editChannelLogo">URL del logo (opcional)</label>
+                        <input type="text" id="editChannelLogo" placeholder="https://..." />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="editCancelBtn">Cancelar</button>
+                    <button class="btn btn-primary" id="editSaveBtn">Guardar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+        <script src="channels.js"></script>
+        <script src="app.js"></script>
+        <script src="tv-nav.js"></script>
+    </body>
+</html>
