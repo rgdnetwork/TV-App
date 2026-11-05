@@ -14,7 +14,7 @@ CONTENIDO
 REQUISITOS
 - Windows 10/11 o macOS
 - Navegador Chrome, Edge, Brave o Safari
-- Ace Stream Media instalado (para reproducir los canales)
+- CanalPeer instalado (para reproducir los canales)
 - En Windows: Python 3 o, si no está, PowerShell (incluido en Windows)
 - En macOS: Python 3 o Ruby (incluido en macOS)
 
@@ -42,7 +42,7 @@ INSTALAR COMO APLICACIÓN
 La app queda como acceso directo, pero necesita que el lanzador esté en marcha.
 
 REPRODUCIR CANALES
-- Instala Ace Stream Media desde su web oficial.
+- Instala CanalPeer.
 - Al pulsar un canal, el navegador pedirá abrir "acestream://".
   Marca la casilla de recordar y acepta.
 - Si no ocurre nada, comprueba que Ace Stream está instalado y asociado
