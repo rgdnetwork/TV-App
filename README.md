@@ -35,11 +35,11 @@ macOS:
 
 No cierres la ventana negra/Terminal mientras uses la app.
 
-Android: 
+Android: (IR AL APARTADO RELEASES)
   1. Descarga el APK
   2. Instala y disfruta (no te olvides de activar las fuentes desconocidas)
 
-Android TV:
+Android TV: (IR AL APARTADO RELEASES)
   1. Descarga el APK
   2. Instala y disfruta (no te olvides de activar las fuentes desconocidas)
 
