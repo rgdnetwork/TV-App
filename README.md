@@ -35,6 +35,14 @@ macOS:
 
 No cierres la ventana negra/Terminal mientras uses la app.
 
+Android: 
+  1. Descarga el APK
+  2. Instala y disfruta (no te olvides de activar las fuentes desconocidas)
+
+Android TV:
+  1. Descarga el APK
+  2. Instala y disfruta (no te olvides de activar las fuentes desconocidas)
+
 INSTALAR COMO APLICACIÓN
 - Chrome/Edge: menú (tres puntos) > "Instalar TV App" o
   "Aplicaciones" > "Instalar este sitio como aplicación".
